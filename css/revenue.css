@@ -1,0 +1,67 @@
+.all{
+    margin-top: 150px;
+    padding: 0 5%;
+    margin-bottom: 150px;
+}
+
+.title{
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.forms{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+.forms input{
+    height: 50px;
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
+.forms select{
+    height: 50px;
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
+.forms button {
+    height: 50px;
+    width: 100%;
+    border: none;
+    background-color: #157AFF;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.forms input:focus {
+    outline: none;
+}
+.forms select:focus{
+    outline: none; 
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+td{
+    background-color: #fff;
+}
+
+th {
+    background-color: #157AFF;
+    color: #fff;
+}
+
+.total{
+color: #fff;
+    background-color: #FF6384;
+
+}

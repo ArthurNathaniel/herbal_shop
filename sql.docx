@@ -1,0 +1,44 @@
+CREATE TABLE admins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE cashiers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL
+    price DECIMAL(10, 2) NOT NULL DEFAULT 0;
+);
+
+
+
+
+
+-- Table to store sales transactions
+CREATE TABLE sales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    payment_method VARCHAR(50) NOT NULL,
+    payment_time DATETIME NOT NULL
+);
+
+-- Table to store items sold in each sale
+CREATE TABLE sales_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sales_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+    timestamp DATETIME NOT NULL,
+    FOREIGN KEY (sales_id) REFERENCES sales(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
