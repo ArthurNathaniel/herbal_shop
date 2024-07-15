@@ -3,9 +3,9 @@
 include 'db.php';
 session_start();
 
-// Check if cashier is logged in
+// Redirect to login if cashier session is not set
 if (!isset($_SESSION['cashier'])) {
-    header("Location: login.php");
+    header("Location: cashier_login.php");
     exit();
 }
 
@@ -33,6 +33,60 @@ function getRevenueData($sql)
         'data' => $revenues,
     ];
 }
+
+// Function to get customer count
+function getCustomerCount($sql)
+{
+    global $conn;
+    $result = $conn->query($sql);
+    $count = 0;
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $count = $row['customer_count'];
+    }
+    return $count;
+}
+
+// Function to get total sales
+function getTotalSales($sql)
+{
+    global $conn;
+    $result = $conn->query($sql);
+    $total = 0;
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $total = $row['total_sales'];
+    }
+    return $total;
+}
+
+// Customer count for today
+$todayCustomerSql = "SELECT COUNT(DISTINCT id) AS customer_count
+                     FROM sales
+                     WHERE DATE(payment_time) = CURDATE()";
+$todayCustomerCount = getCustomerCount($todayCustomerSql);
+
+// Customer count for this week
+$thisWeekCustomerSql = "SELECT COUNT(DISTINCT id) AS customer_count
+                        FROM sales
+                        WHERE YEARWEEK(payment_time) = YEARWEEK(NOW())";
+$thisWeekCustomerCount = getCustomerCount($thisWeekCustomerSql);
+
+// Customer count for this month
+$thisMonthCustomerSql = "SELECT COUNT(DISTINCT id) AS customer_count
+                         FROM sales
+                         WHERE MONTH(payment_time) = MONTH(NOW()) AND YEAR(payment_time) = YEAR(NOW())";
+$thisMonthCustomerCount = getCustomerCount($thisMonthCustomerSql);
+
+// Customer count for this year
+$thisYearCustomerSql = "SELECT COUNT(DISTINCT id) AS customer_count
+                        FROM sales
+                        WHERE YEAR(payment_time) = YEAR(NOW())";
+$thisYearCustomerCount = getCustomerCount($thisYearCustomerSql);
+
+// Customer count for all time
+$allTimeCustomerSql = "SELECT COUNT(DISTINCT id) AS customer_count FROM sales";
+$allTimeCustomerCount = getCustomerCount($allTimeCustomerSql);
 
 // Today's Revenue
 $todaySql = "SELECT p.product_name, SUM(si.total_price) AS product_revenue
@@ -70,7 +124,39 @@ $thisYearSql = "SELECT p.product_name, SUM(si.total_price) AS product_revenue
                 GROUP BY p.id, p.product_name";
 $thisYearData = getRevenueData($thisYearSql);
 
-// Convert data to JSON format
+// Total sales for today
+$todayTotalSalesSql = "SELECT SUM(total_price) AS total_sales
+                       FROM sales_items si
+                       JOIN sales s ON si.sales_id = s.id
+                       WHERE DATE(s.payment_time) = CURDATE()";
+$todayTotalSales = getTotalSales($todayTotalSalesSql);
+
+// Total sales for this week
+$thisWeekTotalSalesSql = "SELECT SUM(total_price) AS total_sales
+                          FROM sales_items si
+                          JOIN sales s ON si.sales_id = s.id
+                          WHERE YEARWEEK(s.payment_time) = YEARWEEK(NOW())";
+$thisWeekTotalSales = getTotalSales($thisWeekTotalSalesSql);
+
+// Total sales for this month
+$thisMonthTotalSalesSql = "SELECT SUM(total_price) AS total_sales
+                           FROM sales_items si
+                           JOIN sales s ON si.sales_id = s.id
+                           WHERE MONTH(s.payment_time) = MONTH(NOW()) AND YEAR(s.payment_time) = YEAR(NOW())";
+$thisMonthTotalSales = getTotalSales($thisMonthTotalSalesSql);
+
+// Total sales for this year
+$thisYearTotalSalesSql = "SELECT SUM(total_price) AS total_sales
+                          FROM sales_items si
+                          JOIN sales s ON si.sales_id = s.id
+                          WHERE YEAR(s.payment_time) = YEAR(NOW())";
+$thisYearTotalSales = getTotalSales($thisYearTotalSalesSql);
+
+// Total sales for all time
+$allTimeTotalSalesSql = "SELECT SUM(total_price) AS total_sales FROM sales_items";
+$allTimeTotalSales = getTotalSales($allTimeTotalSalesSql);
+
+// Convert data to JSON format for charts
 $todayJsonData = json_encode([
     'labels' => $todayData['labels'],
     'data' => $todayData['data'],
@@ -101,8 +187,14 @@ $thisYearJsonData = json_encode([
     <?php include 'cdn.php' ?>
     <title>Cashier Dashboard</title>
     <link rel="stylesheet" href="./css/base.css">
-    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="./css/revenue.css">
     <link rel="stylesheet" href="./css/dashboard.css">
+    <style>
+      
+      
+
+        
+    </style>
 </head>
 
 <body>
@@ -114,172 +206,120 @@ $thisYearJsonData = json_encode([
             </div>
 
             <div class="logout">
-                <a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i>
-                </a>
+                <a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i></a>
                 <p> Logout</p>
             </div>
         </div>
 
-
         <div class="heading">
-            <div class="greeting">Welcome, <?php echo htmlspecialchars($cashierUsername); ?>!</div>
+            <div class="greeting">
+            <p>Welcome, <?php echo htmlspecialchars($cashierUsername); ?>!</p>
 
-            <h1 style="text-align: center;">Revenue per Product</h1>
+                <div id="clock"></div>
+            </div>
         </div>
+      
+        <div class="swiper mySwiper4">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide c_box customer1">
+                    <h3>Today:</h3>
+                    <h1><?php echo $todayCustomerCount; ?> </h1>
+                    <i class="fa-solid fa-user-group"></i>
+                </div>
+             
+                <div class="swiper-slide c_box customer5">
+                    <h3>Today:</h3>
+                    <h1>₵<?php echo number_format($todayTotalSales, 2); ?></h1>
+                    <i class="fa-solid fa-user-group"></i>
+                </div>
+            </div>
+        </div>
+    
+        
+
         <div class="dashboard">
             <div class="chart">
                 <h4>Chart for Today</h4>
                 <canvas id="todayChart" width="400" height="400"></canvas>
             </div>
-            <div class="chart">
-                <h4>Chart for This Week</h4>
-                <canvas id="thisWeekChart" width="400" height="400"></canvas>
-            </div>
-            <div class="chart">
-                <h4>Chart for This Month</h4>
-                <canvas id="thisMonthChart" width="400" height="400"></canvas>
-            </div>
-            <div class="chart">
-                <h4>Chart for This Year</h4>
-                <canvas id="thisYearChart" width="400" height="400"></canvas>
-            </div>
         </div>
     </div>
-
+    <script src="./js/swiper.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // JavaScript part for Chart.js
-        var ctx1 = document.getElementById('todayChart').getContext('2d');
-        var ctx2 = document.getElementById('thisWeekChart').getContext('2d');
-        var ctx3 = document.getElementById('thisMonthChart').getContext('2d');
-        var ctx4 = document.getElementById('thisYearChart').getContext('2d');
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            const hoursString = hours.toString().padStart(2, '0');
+            const timeString = `${hoursString}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('clock').textContent = timeString;
+        }
 
-        // Today's Revenue Chart (Bar Chart)
-        var todayData = <?php echo $todayJsonData; ?>;
-        var todayChart = new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: todayData.labels,
-                datasets: [{
-                    label: 'Today Revenue',
-                    data: todayData.data,
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(153, 102, 255)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        precision: 0,
-                        callback: function(value, index, values) {
-                            return '$' + value.toFixed(2); // Format y-axis labels with $
-                        }
-                    }
-                }
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            updateClock();
+            setInterval(updateClock, 1000);
         });
 
-        // This Week's Revenue Chart (Doughnut Chart)
-        var thisWeekData = <?php echo $thisWeekJsonData; ?>;
-        var thisWeekChart = new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: thisWeekData.labels,
-                datasets: [{
-                    label: 'This Week Revenue',
-                    data: thisWeekData.data,
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(153, 102, 255)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return '$' + tooltipItem.raw.toFixed(2); // Format tooltip with $
+        function createChart(chartId, labels, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Revenue',
+                        data: data,
+                        backgroundColor: [
+    'rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)', 'rgb(153, 102, 255)',
+    'rgb(201, 203, 207)', 'rgb(255, 159, 64)', 'rgb(255, 99, 71)', 'rgb(144, 238, 144)', 'rgb(173, 216, 230)',
+    'rgb(250, 128, 114)', 'rgb(255, 69, 0)', 'rgb(255, 20, 147)', 'rgb(138, 43, 226)', 'rgb(139, 69, 19)',
+    'rgb(47, 79, 79)', 'rgb(112, 128, 144)', 'rgb(119, 136, 153)', 'rgb(0, 255, 255)', 'rgb(0, 128, 128)',
+    'rgb(123, 104, 238)', 'rgb(72, 61, 139)', 'rgb(106, 90, 205)', 'rgb(240, 230, 140)', 'rgb(255, 140, 0)',
+    'rgb(255, 215, 0)', 'rgb(255, 248, 220)', 'rgb(240, 255, 255)', 'rgb(70, 130, 180)', 'rgb(176, 196, 222)',
+    'rgb(220, 20, 60)', 'rgb(255, 182, 193)', 'rgb(255, 160, 122)', 'rgb(250, 250, 210)', 'rgb(127, 255, 0)',
+    'rgb(173, 255, 47)', 'rgb(0, 250, 154)', 'rgb(144, 238, 144)', 'rgb(32, 178, 170)', 'rgb(0, 255, 127)',
+    'rgb(50, 205, 50)', 'rgb(255, 127, 80)', 'rgb(222, 184, 135)', 'rgb(255, 228, 196)', 'rgb(255, 218, 185)',
+    'rgb(218, 112, 214)', 'rgb(186, 85, 211)', 'rgb(148, 0, 211)', 'rgb(153, 50, 204)', 'rgb(147, 112, 219)'
+],
+                        // borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₵' + value;
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
-        // This Month's Revenue Chart (Pie Chart)
-        var thisMonthData = <?php echo $thisMonthJsonData; ?>;
-        var thisMonthChart = new Chart(ctx3, {
-            type: 'pie',
-            data: {
-                labels: thisMonthData.labels,
-                datasets: [{
-                    label: 'This Month Revenue',
-                    data: thisMonthData.data,
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(153, 102, 255)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return '$' + tooltipItem.raw.toFixed(2); // Format tooltip with $
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        document.addEventListener('DOMContentLoaded', function() {
+            updateClock();
+            setInterval(updateClock, 1000);
 
-        // This Year's Revenue Chart (Bar Chart)
-        var thisYearData = <?php echo $thisYearJsonData; ?>;
-        var thisYearChart = new Chart(ctx4, {
-            type: 'bar',
-            data: {
-                labels: thisYearData.labels,
-                datasets: [{
-                    label: 'This Year Revenue',
-                    data: thisYearData.data,
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(153, 102, 255)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        precision: 0,
-                        callback: function(value, index, values) {
-                            return '$' + value.toFixed(2); // Format y-axis labels with $
-                        }
-                    }
-                }
-            }
+            const todayData = <?php echo $todayJsonData; ?>;
+            createChart('todayChart', todayData.labels, todayData.data);
+
+            const thisWeekData = <?php echo $thisWeekJsonData; ?>;
+            createChart('thisWeekChart', thisWeekData.labels, thisWeekData.data);
+
+            const thisMonthData = <?php echo $thisMonthJsonData; ?>;
+            createChart('thisMonthChart', thisMonthData.labels, thisMonthData.data);
+
+            const thisYearData = <?php echo $thisYearJsonData; ?>;
+            createChart('thisYearChart', thisYearData.labels, thisYearData.data);
         });
     </script>
 </body>

@@ -46,17 +46,17 @@ body {
 
 .dashboard {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr ;
     gap: 30px;
     padding: 0 5%;
+    padding-block: 50px;
 }
 
 .chart {
     margin-top: 50px;
     background-color: #fff;
-    padding: 0 5%;
+    padding: 0 2%;
     padding-block: 20px;
-
 }
 
 .chart h4 {
@@ -67,7 +67,7 @@ canvas {
     border: 2px solid;
     width: 100% !important;
     object-fit: contain;
-    height: 400px !important;
+    height: 500px !important;
     margin-top: 20px;
 }
 
@@ -80,3 +80,83 @@ canvas {
 .heading{
     margin-top: 150px;
 }
+.mySwiper2, .mySwiper3, .mySwiper4, .mySwiper5{
+    padding: 0 5%;
+    margin-top: 50px;
+}
+.c_box{
+    padding: 0 2%;
+    padding-block: 50px;
+    background-color: #fff;
+    text-align: left;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+   
+    position: relative;
+}
+
+.c_box h3{
+    width: 100%;
+}
+
+.c_box h1{
+
+width: 100%;}
+
+.c_box i{
+    font-size: 45px;
+    position: absolute;
+    right: 20px;
+}
+
+.customer1{
+    background-color: #FF6384;
+    color: #fff;
+}
+
+.customer2{
+    background-color: #157AFF;
+color: #fff;
+}
+
+.customer3{
+ 
+    background-color: rgb(255, 205, 86);}
+
+    .customer4{
+        background-color: #c2c3c438;
+    }
+
+    .greeting {
+        padding: 0 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #clock {
+        font-size: 1.5em;
+        font-weight: bold;
+        padding: 10px 20px;
+       
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        color: #333;
+        text-align: center;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+
+    
+
+    @media only screen and (max-width: 1110px) {
+        .greeting{
+            display: flex;
+            flex-direction: column;
+        }
+        #clock{
+            margin-top: 15px;
+        }
+    }

@@ -1,0 +1,85 @@
+.home_navbar{
+    border-bottom: 1px solid #ddd;
+    padding-block: 15px;
+    background-color: #fff;
+}
+.title{
+    margin-top: 50px;
+    text-align: center;
+}
+.logos{
+    height: 90px;
+    width: 150px;
+
+    border: 2px solid;
+   margin: 0 auto;
+}
+.all{
+    padding: 0 15%;
+}
+
+.account_grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    padding-bottom: 50px;
+}
+
+.account_box{
+    /* border: 1.8px dashed; */
+   
+    text-align: center;
+    background-color: #fff;
+    margin-top: 30px;
+    /* border-radius: 10px; */
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+   
+}
+
+.account_box img{
+    width: 100%;
+    height: 100px;
+    object-fit: contain;
+}
+
+.account_box h3{
+    color:  #000;
+    width: 100%;
+    text-align: left;
+}
+
+.account_box a{
+    width: 100%;
+    padding: 0 5%;
+    padding-block: 50px;
+}
+.account_box p{
+    margin-top: 10px;
+    color: #000;
+}
+.customer1{
+    background-color: #FF6384;
+    color: #fff;
+}
+
+.customer2{
+    background-color: #157AFF;
+color: #fff;
+}
+
+.customer3{
+ 
+    background-color: rgb(255, 205, 86);}
+
+    .customer4{
+        background-color: #c2c3c438;
+    }
+
+@media only screen and (max-width: 1110px) {
+.account_grid{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+}

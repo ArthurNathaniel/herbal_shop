@@ -11,7 +11,7 @@ if (isset($_GET['sales_id'])) {
                   INNER JOIN sales_items si ON s.id = si.sales_id
                   INNER JOIN products p ON si.product_id = p.id
                   WHERE s.id = ?";
-    
+
     $stmt_sales = $conn->prepare($sql_sales);
     $stmt_sales->bind_param("i", $sales_id);
     $stmt_sales->execute();
@@ -30,53 +30,97 @@ if (isset($_GET['sales_id'])) {
 
         // Display receipt details
 ?>
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <title>Sales Receipt - #<?php echo $sales_id; ?></title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                }
-                .receipt-container {
-                    max-width: 600px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    border: 1px solid #ccc;
-                    text-align: center;
-                }
-                .receipt-header {
-                    margin-bottom: 20px;
-                }
-                .receipt-info {
-                    margin-bottom: 10px;
-                }
-                .receipt-info p {
-                    margin: 5px 0;
-                }
-                .receipt-products {
-                    margin-top: 20px;
-                }
-                .receipt-products p {
-                    text-align: left;
-                    margin-bottom: 10px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="receipt-container">
-                <div class="receipt-header">
-                    <h1>Sales Receipt</h1>
-                    <p>#<?php echo $sales_id; ?></p>
-                </div>
-                <div class="receipt-info">
-                    <p><strong>Date & Time:</strong> <?php echo $formatted_payment_time; ?></p>
-                    <p><strong>Payment Method:</strong> <?php echo $payment_method; ?></p>
-                    <p><strong>Total Amount:</strong> GH₵<?php echo number_format($total_amount, 2); ?></p>
-                </div>
-                <div class="receipt-products">
-                    <h3>Products Sold:</h3>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <?php include 'cdn.php' ?>
+    <title>Sales Receipt - #<?php echo $sales_id; ?></title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+            width: 58mm;
+        }
+
+        .receipt-container {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px dashed #000;
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .receipt-info,
+        .receipt-total {
+            margin-bottom: 10px;
+        }
+
+        .receipt-info p,
+        .receipt-total p {
+            margin: 0;
+        }
+
+        .receipt-products table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .receipt-products th,
+        .receipt-products td {
+            text-align: left;
+            padding: 2px 0;
+        }
+
+        .receipt-products th {
+            border-bottom: 1px dashed #000;
+        }
+
+        .print-button {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            margin-top: 10px;
+            background-color: #000;
+            color: white;
+            border: none;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="receipt-container">
+        <div class="receipt-header">
+            <h1>Sales Receipt</h1>
+            <p>RECEIPT ID: <?php echo $sales_id; ?></p>
+        </div>
+
+        <div class="receipt-info">
+            <p><strong>Date & Time:</strong> <?php echo $formatted_payment_time; ?></p>
+            <p><strong>Payment Method:</strong> <?php echo $payment_method; ?></p>
+        </div>
+
+        <div class="receipt-products">
+            <h3>Products Sold:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <?php
                     // Reset the result set pointer to the beginning
                     $result_sales->data_seek(0);
@@ -84,22 +128,26 @@ if (isset($_GET['sales_id'])) {
                     // Iterate through each sales item and display it
                     while ($row = $result_sales->fetch_assoc()) {
                     ?>
-                        <p>
-                            <strong>Product Name:</strong> <?php echo $row['product_name']; ?><br>
-                            <strong>Price (GH₵):</strong> GH₵<?php echo number_format($row['price'], 2); ?><br>
-                            <strong>Quantity:</strong> <?php echo $row['quantity']; ?><br>
-                            <strong>Total Price (GH₵):</strong> GH₵<?php echo number_format($row['total_price'], 2); ?>
-                        </p>
+                    <tr>
+                        <td><?php echo $row['product_name']; ?></td>
+                        <td><?php echo $row['quantity']; ?></td>
+                        <td>GH₵<?php echo number_format($row['price'], 2); ?></td>
+                        <td>GH₵<?php echo number_format($row['total_price'], 2); ?></td>
+                    </tr>
                     <?php
                     }
                     ?>
-                </div>
-                <p style="text-align: center; margin-top: 20px;">
-                    <button onclick="window.print();">Print Receipt</button>
-                </p>
-            </div>
-        </body>
-        </html>
+                </tbody>
+            </table>
+        </div>
+        <div class="receipt-total">
+            <p>Grand Total: <b>GH₵<?php echo number_format($total_amount, 2); ?></b></p>
+        </div>
+        <button class="print-button" onclick="window.print();">Print Receipt</button>
+    </div>
+</body>
+
+</html>
 <?php
     } else {
         echo "Error: No sales found with ID #{$sales_id}.";

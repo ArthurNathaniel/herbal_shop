@@ -1,0 +1,77 @@
+.receipt-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.receipt-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.receipt-header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+.receipt-header p {
+    margin: 5px 0;
+    color: #777;
+}
+.receipt-info {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+.receipt-info p {
+    margin: 5px 0;
+    color: #555;
+}
+.receipt-products {
+    margin-top: 20px;
+}
+.receipt-products h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.receipt-total {
+    margin-top: 20px;
+    text-align: right;
+}
+.receipt-total p {
+    margin: 5px 0;
+    font-size: 18px;
+    color: #333;
+}
+.print-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+.print-button:hover {
+    background-color: #45a049;
+}
+
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        /* For Chrome and Safari */
+        background-color: #ffffff;
+        /* Set the background color */
+    }
+    .print-button{
+        display: none;
+    }
+}
