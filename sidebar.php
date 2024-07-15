@@ -1,6 +1,6 @@
 <div class="sidebar_all">
     <i class="fa-solid fa-circle-xmark close-icon" onclick="this.parentElement.style.display='none';"></i>
-    <div class="logo"></div>
+    <div class="logos"></div>
   
     <div class="links">
      
@@ -48,7 +48,7 @@
 <button id="toggleButton">
     <i class="fa-solid fa-bars-staggered"></i>
 </button>
-
+<p>Menu</p>
 <script>
     // Get the button and sidebar elements
     var toggleButton = document.getElementById("toggleButton");

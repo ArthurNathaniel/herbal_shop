@@ -11,7 +11,7 @@
 
 <body>
     <div class="home_navbar">
-        <div class="logos"></div>
+        <div class="logo"></div>
     </div>
     <div class="all">
        <div class="title">

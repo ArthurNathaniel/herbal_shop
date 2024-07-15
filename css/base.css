@@ -59,16 +59,37 @@ body {
 }
 
 .logo {
-  height: 150px;
+  height: 70px;
   width: 150px;
-  border-radius: 50%;
-  margin-block: 30px;
+  /* border-radius: 50%; */
+  /* margin-block: 30px; */
   margin-left: auto;
   margin-right: auto;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px; */
+  background-image: url(../images/logo.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.logos{
+  height: 150px;
+  width: 100%;
+  /* border-radius: 50%; */
+  /* margin-block: 30px; */
+  margin-left: auto;
+  margin-right: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px; */
+  background-image: url(../images/logo.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .links {
