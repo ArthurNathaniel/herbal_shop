@@ -142,7 +142,7 @@ while ($row = $result_sales->fetch_assoc()) {
                             <td><?php echo $row['payment_method']; ?></td>
                             <td><?php echo $row['payment_time']; ?></td>
                             <td><?php echo $row['product_names']; ?></td>
-                            <td class="print"><a href="generate_receipt.php?sales_id=<?php echo $row['sales_id']; ?>"><i class="fa-solid fa-print"></i></a></td>
+                            <td class="print`"><a href="generate_receipt.php?sales_id=<?php echo $row['sales_id']; ?>"><i class="fa-solid fa-print"></i></a></td>
                         </tr>
                     <?php endforeach; ?>
                     <tr>
