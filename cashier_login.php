@@ -8,8 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM cashiers WHERE username = '$username'";
-    $result = $conn->query($sql);
+    // Use prepared statements to prevent SQL injection
+    $stmt = $conn->prepare("SELECT * FROM cashiers WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
@@ -29,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php include 'cdn.php' ?>
+    <?php include 'cdn.php'; ?>
     <title>Cashier Login</title>
     <link rel="stylesheet" href="./css/base.css">
     <link rel="stylesheet" href="./css/login.css">
@@ -82,7 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div class="forms">
                     <label>Password:</label>
-                    <input type="password" placeholder="Enter your password" name="password" required>
+                    <div class="toggle-password"><i class="fa-regular fa-eye-slash"></i></div>
+                    <input type="password" id="password" placeholder="Enter your password" name="password" required>
                     <span><i class="fas fa-lock"></i></span>
                 </div>
                 <div class="forms">
@@ -94,7 +98,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </div>
     </div>
+    <style>
+        .toggle-password {
+            position: absolute;
+            right: 20px !important;
+            top: 50%;
+            cursor: pointer;
+        }
+    </style>
     <script src="./js/swiper.js"></script>
+    <script>
+        // Toggle password visibility
+        document.querySelector('.toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
+    </script>
 </body>
 
 </html>

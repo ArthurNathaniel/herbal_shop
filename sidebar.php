@@ -22,6 +22,7 @@
             
             echo ' <h3>SALES REVENUE</h3>';
             echo '<a href="admin_dashboard.php">Admin Dashboard</a>';
+            echo '<a href="cancel_sales.php">Cancel Sales</a>';
             echo '<a href="daily_sales_revenue_query.php">Daily Sales Revenue</a>';
             echo '<a href="weekly_sales_revenue_query.php">Weekly Sales Revenue</a>';
             echo '<a href="monthly_sales_revenue_query.php">Monthly Sales Revenue</a>';

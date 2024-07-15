@@ -145,6 +145,10 @@ if (isset($_GET['sales_id'])) {
         </div>
         <button class="print-button" onclick="window.print();">Print Receipt</button>
     </div>
+
+    <br>
+    <br>
+    <a href="pos.php">Return back To POS</a>
 </body>
 
 </html>

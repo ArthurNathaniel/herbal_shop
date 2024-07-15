@@ -130,6 +130,7 @@ while ($row = $result_sales->fetch_assoc()) {
                     <th>Payment Method</th>
                     <th>Payment Time</th>
                     <th>Products</th>
+                    <th>Receipt</th>
                 </tr>
             </thead>
             <tbody>
@@ -141,14 +142,15 @@ while ($row = $result_sales->fetch_assoc()) {
                             <td><?php echo $row['payment_method']; ?></td>
                             <td><?php echo $row['payment_time']; ?></td>
                             <td><?php echo $row['product_names']; ?></td>
+                            <td class="print"><a href="generate_receipt.php?sales_id=<?php echo $row['sales_id']; ?>"><i class="fa-solid fa-print"></i></a></td>
                         </tr>
                     <?php endforeach; ?>
                     <tr>
-                        <td colspan="5"><strong>Total Sales: GH₵<?php echo number_format($total_sales, 2); ?></strong></td>
+                        <td colspan="6"><strong>Total Sales: GH₵<?php echo number_format($total_sales, 2); ?></strong></td>
                     </tr>
                 <?php else : ?>
                     <tr>
-                        <td colspan="5">No sales transactions found.</td>
+                        <td colspan="6">No sales transactions found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -160,7 +162,6 @@ while ($row = $result_sales->fetch_assoc()) {
         flatpickr("#query_date", {
             dateFormat: "Y-m-d",
             maxDate: "today",
-             minDate: "today",
         });
     </script>
 </body>

@@ -1,21 +1,21 @@
 * {
-  
+
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   text-decoration: none;
-  font-family: "Asetena", sans-serif;
+  font-family: 'Circular', sans-serif;
 
 }
 
 body {
-  font-family: "Asetena", sans-serif;
+  font-family: 'Circular', sans-serif;
   background-color: #F7F9FC;
   color: #29304D;
 }
 
 @font-face {
-  font-family: 'Asetena';
+  font-family: 'Circular';
   src: url('./circular.ttf') format('truetype');
   font-weight: 400;
 }
@@ -94,13 +94,13 @@ body {
 .links h3 {
   padding: 0 10%;
   padding-block: 10px;
-    background-color: #157AFF;
+  background-color: #157AFF;
   text-transform: uppercase;
   color: #fff;
 }
 
 .links a:hover {
-    background-color: #157AFF;
+  background-color: #157AFF;
   background-color: #fff;
   color: #000;
 }
@@ -108,15 +108,12 @@ body {
 
 
 #toggleButton {
- width: 60px;
- height: 60px;
+  width: 60px;
+  height: 60px;
   border: none;
-border-radius: 50%;
-
+  border-radius: 50%;
   z-index: 332;
-
-    background-color: #157AFF;
-
+  background-color: #157AFF;
 }
 
 
@@ -135,13 +132,11 @@ border-radius: 50%;
   justify-content: space-between;
   align-self: center;
   align-items: center;
-  position: static;
-  top: 0;
   width: 100%;
   position: fixed;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-top: 0;
-z-index: 435243;
+  top: 0;
+  z-index: 435243;
 }
 
 .logout a {
@@ -157,17 +152,18 @@ z-index: 435243;
   color: #fff;
 }
 
-.close-icon{
+.close-icon {
   position: absolute;
   top: 0;
   right: 0;
 }
-.close-icon{
+
+.close-icon {
   font-size: 40px;
   color: #FF6384;
 }
 
-table button{
+table button {
   background-color: #FF6384;
   width: 100%;
   height: 50px;
@@ -175,8 +171,19 @@ table button{
   color: #fff;
 }
 
+.print{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-block: 20px;
+}
+
+.print a{
+  color: #157AFF;
+}
+
 @media only screen and (max-width: 1110px) {
-  .sidebar_all{
+  .sidebar_all {
     width: 70%;
   }
 }
